@@ -21,6 +21,13 @@ public class UserResponseDTO {
 	public String getUserMail() {
 		return userMail;
 	}
+	public UserResponseDTO(String userId, String userMail,String userPassword,String userRole) {
+		super();
+		this.userId = userId;
+		this.userMail = userMail;
+		this.userPassword = userPassword;
+		this.userRole = userRole;
+	}
 	public void setUserMail(String userMail) {
 		this.userMail = userMail;
 	}

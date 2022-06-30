@@ -6,6 +6,11 @@ public class CourseResponseDTO {
 	public String getCourseName() {
 		return courseName;
 	}
+	public CourseResponseDTO(String courseName, String courseId) {
+		super();
+		this.courseName = courseName;
+		this.courseId = courseId;
+	}
 	public void setCourseName(String courseName) {
 		this.courseName = courseName;
 	}

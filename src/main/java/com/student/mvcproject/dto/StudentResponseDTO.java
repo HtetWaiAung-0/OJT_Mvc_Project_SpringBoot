@@ -49,6 +49,22 @@ public class StudentResponseDTO {
 	public void setStuEducation(String stuEducation) {
 		this.stuEducation = stuEducation;
 	}
+	public StudentResponseDTO(String stuId, String stuName, String stuDob, String stuGender, String stuPhone,
+			String stuEducation) {
+		super();
+		this.stuId = stuId;
+		this.stuName = stuName;
+		this.stuDob = stuDob;
+		this.stuGender = stuGender;
+		this.stuPhone = stuPhone;
+		this.stuEducation = stuEducation;
+		
+	}
+	
+	public StudentResponseDTO(List<String> stuAttend) {
+		super();
+		this.stuAttend = stuAttend;
+	}
 	public List<String> getStuAttend() {
 		return stuAttend;
 	}
