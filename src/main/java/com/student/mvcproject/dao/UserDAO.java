@@ -36,7 +36,6 @@ public class UserDAO {
 	}
 	
 	public UserResponseDTO selectId(String id) {
-		UserResponseDTO res = new UserResponseDTO();
 		String sql = "select * from user where userId=?";
 		
 		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new UserResponseDTO(
@@ -48,10 +47,9 @@ public class UserDAO {
 
 	}
 	
-	public UserResponseDTO selectIdAndMail(String id,String mail) {
-		UserResponseDTO res = new UserResponseDTO();
+	public List<UserResponseDTO> selectIdAndMail(String id,String mail) {
 		String sql = "select * from user where userId=? OR userMail=?";
-		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new UserResponseDTO(
+		return jdbcTemplate.query(sql, (rs, rowNum) -> new UserResponseDTO(
 				rs.getString("userId"),
 				rs.getString("userMail"),
 				rs.getString("userPassword"),
@@ -62,19 +60,22 @@ public class UserDAO {
 	
 	public Boolean selectMailAndPassword(String mail,String password) {
 		String sql = "select * from user where userMail=? AND userpassword=?";
-		UserResponseDTO check = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new UserResponseDTO(
+		List<UserResponseDTO> check = jdbcTemplate.query(sql, (rs, rowNum) -> new UserResponseDTO(
 				rs.getString("userId"),
 				rs.getString("userMail"),
 				rs.getString("userPassword"),
 				rs.getString("userRole")),
 				mail,password);
-		return check != null;
+		boolean c = false;
+		if(check != null) {
+			c = true;
+		}
+		return c;
 	}
 	
-	public UserResponseDTO selectMail(String mail) {
-		UserResponseDTO res = new UserResponseDTO();
+	public List<UserResponseDTO> selectMail(String mail) {
 		String sql = "select * from user where userMail=?";
-		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new UserResponseDTO(
+		return jdbcTemplate.query(sql, (rs, rowNum) -> new UserResponseDTO(
 				rs.getString("userId"),
 				rs.getString("userMail"),
 				rs.getString("userPassword"),

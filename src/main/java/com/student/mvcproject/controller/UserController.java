@@ -114,10 +114,6 @@ public class UserController {
 	
 	@RequestMapping(value = "/searchUser", method = RequestMethod.POST)
 	public ModelAndView searchUser(@ModelAttribute("userBean") UserBean userBean, ModelMap model) {
-		
-		
-		
-
 		List<UserResponseDTO> showList = new ArrayList<>();
 		if (userBean.getSearchUserId().isBlank() && userBean.getSearchUserMail().isBlank()) {
 			showList = dao.selectAll();
@@ -126,11 +122,11 @@ public class UserController {
 			return new ModelAndView("USR003", "userBean", new UserBean());
 		} else {
 			if (userBean.getSearchUserId().isBlank()) {
-				showList.add(dao.selectMail(userBean.getSearchUserMail()));
+				showList = dao.selectMail(userBean.getSearchUserMail());
 			} else if (userBean.getSearchUserMail().isBlank()) {
 				showList.add(dao.selectId(userBean.getSearchUserId()));
 			} else {
-				showList.add(dao.selectIdAndMail(userBean.getSearchUserId(), userBean.getSearchUserMail()));
+				showList = dao.selectIdAndMail(userBean.getSearchUserId(), userBean.getSearchUserMail());
 
 			}
 
@@ -138,10 +134,6 @@ public class UserController {
 			return new ModelAndView("USR003", "userBean", new UserBean());
 		}
 	}
-	
-	
-	
-	
 	@RequestMapping(value = "/updateUserPage/updateUser", method = RequestMethod.POST)
 	public String updateUser(@ModelAttribute("userBean") UserBean userBean, ModelMap model) {
 //        if(bs.hasErrors()) {

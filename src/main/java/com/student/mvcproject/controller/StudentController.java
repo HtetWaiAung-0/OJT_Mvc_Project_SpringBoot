@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.student.mvcproject.bean.StudentBean;
+import com.student.mvcproject.dao.CourseStudentDAO;
 import com.student.mvcproject.dao.StudentDAO;
+import com.student.mvcproject.dto.CourseStudentRequestDTO;
+import com.student.mvcproject.dto.CourseStudentResponseDTO;
 import com.student.mvcproject.dto.StudentRequestDTO;
 import com.student.mvcproject.dto.StudentResponseDTO;
 
@@ -26,12 +29,7 @@ public class StudentController {
 	   
 	 @RequestMapping(value="/stuAddPage", method=RequestMethod.GET)
 	    public ModelAndView stuAddPage(ModelMap model) {
-		 
-		
-		 
-		 
 	        StudentBean stuBean = new StudentBean();
-
 	        int i = dao.getId();
 	        String finalStuString = "STU" + String.format("%03d", i);
 	        
@@ -65,12 +63,9 @@ public class StudentController {
 				dto.setStuDob(stuBean.getStuDob());
 				dto.setStuGender(stuBean.getStuGender());
 				dto.setStuPhone(stuBean.getStuPhone());
-				dto.setStuEducation(stuBean.getStuEducation());
-				
-				dao.updateStudentData(dto);
-				
+				dto.setStuEducation(stuBean.getStuEducation());			
+				dao.updateStudentData(dto);			
 				return "redirect:/SearchStudentController";
-
 			}
 	 }
 	 

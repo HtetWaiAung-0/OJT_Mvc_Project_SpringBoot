@@ -1,6 +1,10 @@
 package com.student.mvcproject.dto;
 
 public class CourseStudentRequestDTO {
+		public CourseStudentRequestDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 		String courseName;
 		String stuId;
 		public String getCourseName() {
