@@ -98,8 +98,8 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/updateUserPage/{userId}", method = RequestMethod.GET)
-	public ModelAndView updateUserPage(@PathVariable String userId,ModelMap model) {
+	@RequestMapping(value = "/updateUserPage", method = RequestMethod.GET)
+	public ModelAndView updateUserPage(@RequestParam("id") String userId,ModelMap model) {
 		
 		return new ModelAndView("USR002", "userBean", dao.selectId(userId));
 	}
@@ -156,8 +156,8 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/deleteUser/{userId}", method = RequestMethod.GET)
-	public String deleteUser(@PathVariable String userId, ModelMap model) {
+	@RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+	public String deleteUser(@RequestParam("id")String userId, ModelMap model) {
 		UserRequestDTO dto = new UserRequestDTO();
 		dto.setUserId(userId);
 		dao.deleteUserData(dto);

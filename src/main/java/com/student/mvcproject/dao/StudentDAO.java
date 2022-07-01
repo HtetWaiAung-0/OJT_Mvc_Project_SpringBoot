@@ -34,7 +34,21 @@ public class StudentDAO {
 		return result;
 
 	}	
-	public StudentResponseDTO selectId(String id) {
+	public List<StudentResponseDTO> selectId(String id) {
+		
+		String sql = "select * from student where stuId=?";
+	
+		return jdbcTemplate.query(sql, (rs, rowNum) -> new StudentResponseDTO(
+				rs.getString("stuId"),
+				rs.getString("stuName"),
+				rs.getString("stuDob"),
+				rs.getString("stuGender"),
+				rs.getString("stuPhone"),
+				rs.getString("stuEducation")),
+				id);
+	}
+	
+public StudentResponseDTO selectIdUpdate(String id) {
 		
 		String sql = "select * from student where stuId=?";
 	
@@ -47,10 +61,10 @@ public class StudentDAO {
 				rs.getString("stuEducation")),
 				id);
 	}
-	public StudentResponseDTO selectName(String name) {
+	public List<StudentResponseDTO> selectName(String name) {
 		
 		String sql = "select * from student where stuName=?";
-		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new StudentResponseDTO(
+		return jdbcTemplate.query(sql, (rs, rowNum) -> new StudentResponseDTO(
 				rs.getString("stuId"),
 				rs.getString("stuName"),
 				rs.getString("stuDob"),
@@ -59,10 +73,10 @@ public class StudentDAO {
 				rs.getString("stuEducation")),
 				name);
 	}	
-	public StudentResponseDTO selectIdAndName(String id,String name) {
+	public List<StudentResponseDTO> selectIdAndName(String id,String name) {
 		
 		String sql = "select * from student where stuId=? OR stuName LIKE ?";
-		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new StudentResponseDTO(
+		return jdbcTemplate.query(sql, (rs, rowNum) -> new StudentResponseDTO(
 				rs.getString("stuId"),
 				rs.getString("stuName"),
 				rs.getString("stuDob"),

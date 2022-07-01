@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.student.mvcproject.dto.CourseRequestDTO;
 import com.student.mvcproject.dto.CourseResponseDTO;
+import com.student.mvcproject.dto.UserResponseDTO;
 
 @Repository
 public class CourseDAO {
@@ -50,10 +51,12 @@ public class CourseDAO {
 	public List<CourseResponseDTO> selectAllCourse() {
 
 		String sql = "select * from course";
-		return jdbcTemplate.query(sql,
-				(rs, rowNum) -> new CourseResponseDTO(rs.getString("courseId"), rs.getString("courseName")));
+		return jdbcTemplate.query(sql, (rs,rowNum)-> new CourseResponseDTO(rs.getString("courseId"),rs.getString("courseName")));
+	
+		
 	}
-
+	
+	
 	public int getId() {
 
 		String sql = "SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mvcproject' AND TABLE_NAME = 'course';";

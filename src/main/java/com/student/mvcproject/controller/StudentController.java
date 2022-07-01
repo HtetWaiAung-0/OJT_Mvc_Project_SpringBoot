@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.student.mvcproject.bean.StudentBean;
+import com.student.mvcproject.dao.CourseDAO;
 import com.student.mvcproject.dao.CourseStudentDAO;
 import com.student.mvcproject.dao.StudentDAO;
+import com.student.mvcproject.dto.CourseResponseDTO;
 import com.student.mvcproject.dto.CourseStudentRequestDTO;
-import com.student.mvcproject.dto.CourseStudentResponseDTO;
+
 import com.student.mvcproject.dto.StudentRequestDTO;
 import com.student.mvcproject.dto.StudentResponseDTO;
 
@@ -26,14 +29,20 @@ public class StudentController {
 	
 	 @Autowired
 	    private StudentDAO dao;
+	 @Autowired
+	    private CourseDAO cdao;
+	 @Autowired
+	 private CourseStudentDAO csdao;
+	 
 	   
 	 @RequestMapping(value="/stuAddPage", method=RequestMethod.GET)
 	    public ModelAndView stuAddPage(ModelMap model) {
 	        StudentBean stuBean = new StudentBean();
 	        int i = dao.getId();
 	        String finalStuString = "STU" + String.format("%03d", i);
-	        
-	       stuBean.setStuId(finalStuString);
+	        stuBean.setStuId(finalStuString);
+	          
+	       model.addAttribute("courseList",cdao.selectAllCourse());
 	        return new ModelAndView("STU001","stuBean",stuBean);
 	    }
 	 @RequestMapping(value = "/updateStu" , method = RequestMethod.POST)
@@ -45,9 +54,9 @@ public class StudentController {
 				model.addAttribute("ststuBean", stuBean);
 				return "USR003";
 			} else {
-				StudentResponseDTO res = new StudentResponseDTO();
+				
 				StudentRequestDTO dto = new StudentRequestDTO();
-				CourseStudentDAO csdao = new CourseStudentDAO();
+				
 				CourseStudentRequestDTO csdto = new CourseStudentRequestDTO();
 				
 				csdto.setStuId(stuBean.getStuId());
@@ -77,9 +86,9 @@ public class StudentController {
 				
 				return "STU001";
 			}else {
-				StudentResponseDTO res = new StudentResponseDTO();
+			
 				StudentRequestDTO dto = new StudentRequestDTO();
-				CourseStudentDAO csdao = new CourseStudentDAO();
+				
 				CourseStudentRequestDTO csdto = new CourseStudentRequestDTO();
 				
 				for(String a : attendArray ) {
@@ -101,20 +110,25 @@ public class StudentController {
 			}
 		}
 	 
-	 @RequestMapping(value = "/updateStuPage/{stuId}", method = RequestMethod.GET)
-		public ModelAndView updateStuPage(@PathVariable String stuId) {
-		 CourseStudentDAO csdao = new CourseStudentDAO();
-		 StudentResponseDTO res = dao.selectId(stuId);
+	 @RequestMapping(value = "/updateStuPage", method = RequestMethod.GET)
+		public ModelAndView updateStuPage(@RequestParam("id") String stuId,ModelMap model) {
+		 
+		 StudentResponseDTO res = dao.selectIdUpdate(stuId);
 		  res.setStuAttend(csdao.selectOne(stuId));
+		 
+	        
+	        List<CourseResponseDTO> courseList = cdao.selectAllCourse();
+	       
+	       model.addAttribute("courseList",courseList);
 		 
 			return new ModelAndView("STU002", "stuBean", res );
 		}
 	 
-	 @RequestMapping(value = "/deleteStu/{stuId}", method = RequestMethod.GET)
-		public String deleteStu(@PathVariable String stuId, ModelMap model) {
+	 @RequestMapping(value = "/deleteStu", method = RequestMethod.GET)
+		public String deleteStu(@RequestParam("id") String stuId, ModelMap model) {
 		 
 		 StudentRequestDTO dto = new StudentRequestDTO();
-			CourseStudentDAO csdao = new CourseStudentDAO(); 
+			 
 			CourseStudentRequestDTO csdto = new CourseStudentRequestDTO();
 		 dto.setStuId(stuId);
 			csdto.setStuId(stuId);
@@ -128,7 +142,7 @@ public class StudentController {
 	 @RequestMapping(value = "/stuSearchPage", method = RequestMethod.GET)
 		public ModelAndView stuSearchPage(ModelMap model) {
 		 
-			CourseStudentDAO csdao = new CourseStudentDAO();
+			
 			List<StudentResponseDTO> list = dao.selectAll();
 			for(StudentResponseDTO a : list) {
 				List<String> clist = csdao.selectOne(a.getStuId());
@@ -142,15 +156,15 @@ public class StudentController {
 	 @RequestMapping(value = "/searchStu", method = RequestMethod.POST)
 		public String searchStu(@ModelAttribute("stuBean") StudentBean stuBean, ModelMap model) {
 		 
-			StudentDAO dao = new StudentDAO();
-			CourseStudentDAO csdao = new CourseStudentDAO();
+			
+			
 			
 			String searchId = stuBean.getSearchId();
 			String searchName = stuBean.getSearchName();
 			String searchCourse = stuBean.getSearchCourse();
 			
-			List<CourseStudentResponseDTO> csList = new ArrayList<>();
-	;		List<StudentResponseDTO> showList = new ArrayList<>();
+			
+			List<StudentResponseDTO> showList = new ArrayList<>();
 			if (searchId.isBlank() && searchName.isBlank() && searchCourse.isBlank()) {
 				showList = dao.selectAll();
 				for(StudentResponseDTO a : showList) {
@@ -165,7 +179,7 @@ public class StudentController {
 
 					List<String> revList = (List<String>) csdao.selectReverse(searchCourse);
 					for(String v : revList) {
-						showList.add(dao.selectId(v));
+						showList = dao.selectId(v);
 					}
 					for(StudentResponseDTO a : showList) {
 						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
@@ -173,24 +187,24 @@ public class StudentController {
 					}
 					
 				} else if (searchId.isBlank() && searchCourse.isBlank()) {
-					showList.add(dao.selectName(searchName));
+					showList = dao.selectName(searchName);
 					for(StudentResponseDTO a : showList) {
 						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
 						a.setStuAttend(clist);   
 					}
 					
 				} else if (searchName.isBlank() && searchCourse.isBlank()) {
-					showList.add(dao.selectId(searchId));
+					showList = dao.selectId(searchId);
 					for(StudentResponseDTO a : showList) {
-						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
+						List<String> clist = (List<String>) csdao.selec tOne(a.getStuId());
 						a.setStuAttend(clist);   
 					}
 				} else if (searchName.isBlank()) {
 					List<String> revList = (List<String>) csdao.selectReverse(searchCourse);
 					for(String v : revList) {
-						showList.add(dao.selectId(v));
+						showList = dao.selectId(v);
 					}
-					showList.add(dao.selectId(searchId));
+					showList = dao.selectId(searchId);
 					for(StudentResponseDTO a : showList) {
 						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
 						a.setStuAttend(clist);   
@@ -198,16 +212,16 @@ public class StudentController {
 				} else if (searchId.isBlank()) {
 					List<String> revList = (List<String>) csdao.selectReverse(searchCourse);
 					for(String v : revList) {
-						showList.add(dao.selectId(v));
+						showList = dao.selectId(v);
 					}
-					showList.add(dao.selectName(searchName));
+					showList = dao.selectName(searchName);
 					for(StudentResponseDTO a : showList) {
 						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
 						a.setStuAttend(clist);   
 					}
 					
 				} else if (searchCourse.isBlank()) {
-					showList.add(dao.selectIdAndName(searchId, searchName));
+					showList = dao.selectIdAndName(searchId, searchName);
 					for(StudentResponseDTO a : showList) {
 						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
 						a.setStuAttend(clist);   
@@ -215,9 +229,9 @@ public class StudentController {
 				} else {
 					List<String> revList = (List<String>) csdao.selectReverse(searchCourse);
 					for(String v : revList) {
-						showList.add(dao.selectId(v));
+						showList = dao.selectId(v);
 					}
-					showList.add(dao.selectIdAndName(searchId, searchName));
+					showList = dao.selectIdAndName(searchId, searchName);
 					for(StudentResponseDTO a : showList) {
 						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
 						a.setStuAttend(clist);   

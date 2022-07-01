@@ -1,27 +1,23 @@
 package com.student.mvcproject.dto;
 
 public class CourseResponseDTO {
-	private String courseName;
 	private String courseId;
-	public String getCourseName() {
-		return courseName;
-	}
-	public CourseResponseDTO(String courseName, String courseId) {
-		super();
-		this.courseName = courseName;
-		this.courseId = courseId;
-	}
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
-	}
+	private String courseName;
 	public String getCourseId() {
 		return courseId;
 	}
 	public void setCourseId(String courseId) {
 		this.courseId = courseId;
 	}
-	public CourseResponseDTO() {
+	public String getCourseName() {
+		return courseName;
+	}
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
+	}
+	public CourseResponseDTO(String courseId, String courseName) {
 		super();
-		// TODO Auto-generated constructor stub
+		this.courseId = courseId;
+		this.courseName = courseName;
 	}
 }

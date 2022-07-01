@@ -44,13 +44,13 @@ public class CourseController {
             return "BUD003";
         } else {
 
-            CourseResponseDTO res = new CourseResponseDTO();
+            
             CourseRequestDTO dto = new CourseRequestDTO();
             dto.setCourseName(cBean.getCourseName());
             dto.setCourseId(cBean.getCourseId());
             dao.insertCourseData(dto);
-            List<CourseResponseDTO> courseList = dao.selectAllCourse();            
-            servletContext.setAttribute("courseList", courseList);
+                      
+          
             model.addAttribute("errorFill", "Success Add");
             return "BUD003";
         }
