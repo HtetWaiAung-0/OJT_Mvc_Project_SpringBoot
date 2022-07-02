@@ -49,6 +49,11 @@ public class StudentResponseDTO {
 	public void setStuEducation(String stuEducation) {
 		this.stuEducation = stuEducation;
 	}
+	public StudentResponseDTO(String stuId, String stuName) {
+		super();
+		this.stuId = stuId;
+		this.stuName = stuName;
+	}
 	public StudentResponseDTO(String stuId, String stuName, String stuDob, String stuGender, String stuPhone,
 			String stuEducation) {
 		super();
@@ -59,8 +64,7 @@ public class StudentResponseDTO {
 		this.stuPhone = stuPhone;
 		this.stuEducation = stuEducation;
 		
-	}
-	
+	}			
 	public StudentResponseDTO(List<String> stuAttend) {
 		super();
 		this.stuAttend = stuAttend;
@@ -92,5 +96,11 @@ public class StudentResponseDTO {
 	public StudentResponseDTO() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	@Override
+	public String toString() {
+		return "StudentResponseDTO [stuId=" + stuId + ", stuName=" + stuName + ", stuDob=" + stuDob + ", stuGender="
+				+ stuGender + ", stuPhone=" + stuPhone + ", stuEducation=" + stuEducation + ", stuAttend=" + stuAttend
+				+ ", searchCourse=" + searchCourse + ", searchId=" + searchId + ", searchName=" + searchName + "]";
 	}
 }

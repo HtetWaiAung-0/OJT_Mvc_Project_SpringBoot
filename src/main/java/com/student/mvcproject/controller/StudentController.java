@@ -154,18 +154,13 @@ public class StudentController {
 	 
 	
 	 @RequestMapping(value = "/searchStu", method = RequestMethod.POST)
-		public String searchStu(@ModelAttribute("stuBean") StudentBean stuBean, ModelMap model) {
-		 
-			
-			
-			
-			String searchId = stuBean.getSearchId();
-			String searchName = stuBean.getSearchName();
-			String searchCourse = stuBean.getSearchCourse();
-			
-			
+		public String searchStu(@ModelAttribute("stuBean") StudentBean stuBean, ModelMap model) {	
+			String searchId = stuBean.getSearchId().isBlank() ? "#$*@" : stuBean.getSearchId();
+			String searchName = stuBean.getSearchName().isBlank() ? "#$*@" : stuBean.getSearchName();
+			String searchCourse = stuBean.getSearchCourse().isBlank() ? "#$*@" : stuBean.getSearchCourse();		
 			List<StudentResponseDTO> showList = new ArrayList<>();
 			if (searchId.isBlank() && searchName.isBlank() && searchCourse.isBlank()) {
+				
 				showList = dao.selectAll();
 				for(StudentResponseDTO a : showList) {
 					List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
@@ -174,73 +169,15 @@ public class StudentController {
 				model.addAttribute("stuList", showList);
 				return "STU003";
 			} else {
-
-				if (searchId.isBlank() && searchName.isBlank()) {
-
-					List<String> revList = (List<String>) csdao.selectReverse(searchCourse);
-					for(String v : revList) {
-						showList = dao.selectId(v);
-					}
-					for(StudentResponseDTO a : showList) {
-						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
-						a.setStuAttend(clist);   
-					}
-					
-				} else if (searchId.isBlank() && searchCourse.isBlank()) {
-					showList = dao.selectName(searchName);
-					for(StudentResponseDTO a : showList) {
-						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
-						a.setStuAttend(clist);   
-					}
-					
-				} else if (searchName.isBlank() && searchCourse.isBlank()) {
-					showList = dao.selectId(searchId);
-					for(StudentResponseDTO a : showList) {
-						List<String> clist = (List<String>) csdao.selec tOne(a.getStuId());
-						a.setStuAttend(clist);   
-					}
-				} else if (searchName.isBlank()) {
-					List<String> revList = (List<String>) csdao.selectReverse(searchCourse);
-					for(String v : revList) {
-						showList = dao.selectId(v);
-					}
-					showList = dao.selectId(searchId);
-					for(StudentResponseDTO a : showList) {
-						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
-						a.setStuAttend(clist);   
-					}
-				} else if (searchId.isBlank()) {
-					List<String> revList = (List<String>) csdao.selectReverse(searchCourse);
-					for(String v : revList) {
-						showList = dao.selectId(v);
-					}
-					showList = dao.selectName(searchName);
-					for(StudentResponseDTO a : showList) {
-						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
-						a.setStuAttend(clist);   
-					}
-					
-				} else if (searchCourse.isBlank()) {
-					showList = dao.selectIdAndName(searchId, searchName);
-					for(StudentResponseDTO a : showList) {
-						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
-						a.setStuAttend(clist);   
-					}
-				} else {
-					List<String> revList = (List<String>) csdao.selectReverse(searchCourse);
-					for(String v : revList) {
-						showList = dao.selectId(v);
-					}
-					showList = dao.selectIdAndName(searchId, searchName);
-					for(StudentResponseDTO a : showList) {
-						List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
-						a.setStuAttend(clist);   
-					}
-				}
-
-				model.addAttribute("stuList", showList);
 				
-
+				showList = dao.selectSearchInculdeCourse(searchId, searchName, searchCourse);
+				
+				for(StudentResponseDTO a : showList) {
+					List<String> clist = (List<String>) csdao.selectOne(a.getStuId());
+					a.setStuAttend(clist);  
+					
+				}
+				model.addAttribute("stuList", showList);
 				return "STU003";
 			}
 	 }

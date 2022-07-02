@@ -61,30 +61,7 @@ public StudentResponseDTO selectIdUpdate(String id) {
 				rs.getString("stuEducation")),
 				id);
 	}
-	public List<StudentResponseDTO> selectName(String name) {
 		
-		String sql = "select * from student where stuName=?";
-		return jdbcTemplate.query(sql, (rs, rowNum) -> new StudentResponseDTO(
-				rs.getString("stuId"),
-				rs.getString("stuName"),
-				rs.getString("stuDob"),
-				rs.getString("stuGender"),
-				rs.getString("stuPhone"),
-				rs.getString("stuEducation")),
-				name);
-	}	
-	public List<StudentResponseDTO> selectIdAndName(String id,String name) {
-		
-		String sql = "select * from student where stuId=? OR stuName LIKE ?";
-		return jdbcTemplate.query(sql, (rs, rowNum) -> new StudentResponseDTO(
-				rs.getString("stuId"),
-				rs.getString("stuName"),
-				rs.getString("stuDob"),
-				rs.getString("stuGender"),
-				rs.getString("stuPhone"),
-				rs.getString("stuEducation")),
-				id,"%"+name+"%");
-	}	
 	public List<StudentResponseDTO> selectAll(){
 		
 		String sql = "select * from student";
@@ -96,6 +73,17 @@ public StudentResponseDTO selectIdUpdate(String id) {
 				rs.getString("stuPhone"),
 				rs.getString("stuEducation")));
 	}	
+	
+public List<StudentResponseDTO> selectSearchInculdeCourse(String id,String name,String course) {
+		
+	String sql = "SELECT distinct student.stuId,student.stuName FROM mvcproject.student right JOIN mvcproject.course_student ON student.stuId=course_student.stuId where student.stuId=? OR student.stuName Like ? OR course_student.courseName Like ?";
+	List<StudentResponseDTO> yo = jdbcTemplate.query(sql, (rs, rowNum) -> new StudentResponseDTO(
+			rs.getString("stuId"),
+			rs.getString("stuName")),
+			id,"%"+name+"%","%"+course+"%");
+		return yo;
+	}
+	
 	public int getId() {
 
 		String sql = "SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mvcproject' AND TABLE_NAME = 'student';";

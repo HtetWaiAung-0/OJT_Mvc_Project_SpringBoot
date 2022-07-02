@@ -19,10 +19,13 @@
                 <div class="col-md-5 ">
             <a href="MNU001.jsp"><h3>Student Registration</h3></a>
         </div>  
-        <div class="col-md-6">
-					<p>User: ${sessionScope.loginName}</p>
-					<p>Current Date : ${sessionScope.date}</p>
-				</div> 
+      
+			<div class="col-md-6">
+            <p>User: 
+            <th:block th:text="${session.loginName}"></th:block>
+            </p>
+            <p>Current Date : <th:block th:text="${session.date}"></th:block></p>
+        </div>
         <div class="col-md-1" >
          <input type="button" class="btn-basic" id="lgnout-button"
 						value="Log Out" onclick="location.href='logOut'">
@@ -55,7 +58,7 @@
             </div>
             <div class="col-auto">
                 <label for="inputPassword2" class="visually-hidden">User Name</label>         
-                <input type="text" class="form-control" id="inputPassword2" placeholder="User Name" th:field="*{searchUserMail}">
+                <input type="text" class="form-control" id="inputPassword2" placeholder="User Mail" th:field="*{searchUserMail}">
             </div>
     
             <div class="col-auto">

@@ -24,14 +24,6 @@ public class CourseStudentDAO {
 		return jdbcTemplate.query(sql,(rs, rowNum) -> rs.getString("courseName"),id);	
 	}
 	
-	
-	
-	public List<String> selectReverse(String course) {	
-		String sql = "select * from course_student where courseName LIKE ?";
-		return jdbcTemplate.query(sql,(rs,rowNum)-> rs.getString("stuId"),"%" + course + "%");
-		
-	}
-	
 	public int deleteData(CourseStudentRequestDTO dto) {
 		int result = 0;
 		String sql = "delete from course_student where stuId=?";
