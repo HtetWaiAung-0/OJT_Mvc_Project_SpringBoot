@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.student.mvcproject.dto.CourseRequestDTO;
 import com.student.mvcproject.dto.CourseResponseDTO;
-import com.student.mvcproject.dto.UserResponseDTO;
+
 
 @Repository
 public class CourseDAO {

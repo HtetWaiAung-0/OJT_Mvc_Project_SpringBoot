@@ -1,9 +1,5 @@
 package com.student.mvcproject.controller;
 
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,42 +11,37 @@ import org.springframework.web.servlet.ModelAndView;
 import com.student.mvcproject.bean.CourseBean;
 import com.student.mvcproject.dao.CourseDAO;
 import com.student.mvcproject.dto.CourseRequestDTO;
-import com.student.mvcproject.dto.CourseResponseDTO;
 
 @Controller
 public class CourseController {
     @Autowired
     private CourseDAO dao;
-    @Autowired
-    private ServletContext servletContext;
 
-    @RequestMapping(value="/courseAddPage", method=RequestMethod.GET)
+    @RequestMapping(value = "/courseAddPage", method = RequestMethod.GET)
     public ModelAndView courseAddPage() {
         CourseBean cBean = new CourseBean();
         int i = dao.getId();
         String finalCourseString = "COU" + String.format("%03d", i);
         cBean.setCourseId(finalCourseString);
-        return new ModelAndView("BUD003","cBean",cBean);
+        return new ModelAndView("BUD003", "cBean", cBean);
     }
 
-    @RequestMapping(value="/courseAdd", method=RequestMethod.POST)
-    public String courseAdd(@ModelAttribute("cBean")CourseBean cBean,ModelMap model) {
-////        if(bs.hasErrors()) {
-////            return "addCourse";
-////        }
+    @RequestMapping(value = "/courseAdd", method = RequestMethod.POST)
+    public String courseAdd(@ModelAttribute("cBean") CourseBean cBean, ModelMap model) {
+        //// if(bs.hasErrors()) {
+        //// return "addCourse";
+        //// }
         if (cBean.getCourseName().isBlank()) {
 
             model.addAttribute("errorFill", "Fill the Blank!!!");
             return "BUD003";
         } else {
 
-            
             CourseRequestDTO dto = new CourseRequestDTO();
             dto.setCourseName(cBean.getCourseName());
             dto.setCourseId(cBean.getCourseId());
             dao.insertCourseData(dto);
-                      
-          
+
             model.addAttribute("errorFill", "Success Add");
             return "BUD003";
         }

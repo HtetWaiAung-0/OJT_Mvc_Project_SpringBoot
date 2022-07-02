@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.student.mvcproject.dto.CourseStudentRequestDTO;
-import com.student.mvcproject.dto.StudentRequestDTO;
+
 
 @Repository
 public class CourseStudentDAO {

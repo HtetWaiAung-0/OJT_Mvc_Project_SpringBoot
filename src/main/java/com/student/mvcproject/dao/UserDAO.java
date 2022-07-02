@@ -67,7 +67,7 @@ public class UserDAO {
 				rs.getString("userRole")),
 				mail,password);
 		boolean c = false;
-		if(check != null) {
+		if(check.size()>0) {
 			c = true;
 		}
 		return c;
